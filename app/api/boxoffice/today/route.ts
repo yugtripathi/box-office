@@ -1,23 +1,27 @@
 import { NextResponse } from 'next/server';
-import { getLiveBoxOffice } from '@/lib/boxoffice';
-
-// Mock IDs for the "Live" movies on dashboard
-const TRACKED_MOVIES = [
-    { id: 1, base: 5403200 }, // Pathaan
-    { id: 2, base: 6904000 }, // Jawan
-    { id: 3, base: 4501000 }, // Animal
-];
+import { db } from '@/lib/db';
 
 export async function GET() {
-    const data = await Promise.all(
-        TRACKED_MOVIES.map(movie => getLiveBoxOffice(movie.id, movie.base))
-    );
+    try {
+        // Get movies with daily box office collections, grouped by movieId
+        const moviesWithCollections = await db.dailyBoxOffice.groupBy({
+            by: ['movieId'],
+            _sum: { amount: true },
+            orderBy: { _sum: { amount: 'desc' } },
+            take: 10 // Return top 10 movies by collection
+        });
 
-    // Convert array to object key-value for easy frontend consumption
-    const responseData: Record<number, string> = {};
-    data.forEach(item => {
-        responseData[item.movieId] = item.revenue;
-    });
+        // Convert to object key-value for easy frontend consumption
+        const responseData: Record<number, string> = {};
+        moviesWithCollections.forEach(item => {
+            if (item._sum.amount) {
+                responseData[item.movieId] = item._sum.amount.toString();
+            }
+        });
 
-    return NextResponse.json(responseData);
+        return NextResponse.json(responseData);
+    } catch (error) {
+        console.error("Error fetching box office data:", error);
+        return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 });
+    }
 }
