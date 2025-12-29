@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model BoxOfficeStats {
+  id        Int      @id @default(autoincrement())
+  movieId   Int      @unique
+  revenue   BigInt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DailyBoxOffice {
+  id        Int      @id @default(autoincrement())
+  movieId   Int
+  date      DateTime
+  amount    BigInt
+  dayNumber Int?      // E.g. Day 1, Day 2
+  
+  @@unique([movieId, date])
+}
