@@ -40,7 +40,7 @@ async function checkScraping() {
         const res2 = await fetch("https://boxofficeindia.com/");
         console.log("BoxOfficeIndia Status:", res2.status);
     } catch (e) {
-        console.log("BOI Error:", e.message);
+        console.log("BOI Error:", (e as Error).message);
     }
 
     console.log("\nChecking access to Sacnilk...");
@@ -48,7 +48,7 @@ async function checkScraping() {
         const res = await fetch("https://www.sacnilk.com/");
         console.log("Sacnilk Status:", res.status);
     } catch (e) {
-        console.log("Sacnilk Error:", e.message);
+        console.log("Sacnilk Error:", (e as Error).message);
     }
 }
 

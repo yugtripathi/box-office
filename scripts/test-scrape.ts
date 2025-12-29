@@ -1,9 +1,5 @@
 
-import { JSDOM } from 'jsdom';
-
-// Note: I need jsdom. I don't know if it's installed. 
-// If not, I'll use simple regex or string search for the test script unless I install it.
-// I'll assume standard string parsing for now to avoid installing deps without permission yet.
+// Note: Using string parsing instead of jsdom to avoid extra dependencies
 
 async function testScraping() {
     const movieName = "Jawan"; // Known movie

@@ -34,7 +34,8 @@ export async function scrapeDailyBoxOffice(title: string, year: string): Promise
         const dailyData: DailyData[] = [];
 
         // 1. Find the Collections Container
-        let targetTable = null;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let targetTable: any = null;
 
         // Try to find the Hindi specific day wise table
         $('.boxofficecollection').each((_, elem) => {
@@ -65,7 +66,7 @@ export async function scrapeDailyBoxOffice(title: string, year: string): Promise
                 const headerCells = rows.eq(0).find('th'); // Assuming headers are th
                 const valueCells = rows.eq(1).find('td');  // Assuming values are td
 
-                headerCells.each((index, elem) => {
+                headerCells.each((index: number, elem: any) => {
                     const headerText = $(elem).text().trim();
                     const dayMatch = headerText.match(/Day\s+(\d+)/i);
 
