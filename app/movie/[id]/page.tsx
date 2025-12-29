@@ -125,13 +125,13 @@ export default async function MoviePage({ params }: MoviePageProps) {
                                 <div className="text-sm text-muted-foreground mb-1 flex items-center gap-1">
                                     <IndianRupee className="h-3 w-3" /> Budget
                                 </div>
-                                <div className="font-bold text-lg">{formatINR(movie.budget)}</div>
+                                <div className="font-bold text-lg">{formatINR(movie.budget * 83)}</div>
                             </div>
                             <div className="p-4 rounded-xl bg-green-500/10">
                                 <div className="text-sm text-muted-foreground mb-1 flex items-center gap-1">
                                     <IndianRupee className="h-3 w-3" /> Revenue
                                 </div>
-                                <div className="font-bold text-lg text-green-500">{formatINR(movie.revenue)}</div>
+                                <div className="font-bold text-lg text-green-500">{formatINR(movie.revenue * 83)}</div>
                             </div>
                             <div className="p-4 rounded-xl bg-muted/50">
                                 <div className="text-sm text-muted-foreground mb-1">Status</div>
