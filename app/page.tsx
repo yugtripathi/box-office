@@ -1,8 +1,8 @@
 import { MovieCard } from "@/components/features/MovieCard";
-import { getLatestReleases, TMDB_IMAGE_BASE_URL } from "@/lib/tmdb";
-import { Button } from "@/components/ui/button";
+import { HeroCarousel } from "@/components/features/HeroCarousel";
+import { getLatestReleases } from "@/lib/tmdb";
 import Link from "next/link";
-import { ArrowRight, TrendingUp, Play, Star, Sparkles, Film, Zap, Trophy } from "lucide-react";
+import { ArrowRight, TrendingUp, Film, Trophy } from "lucide-react";
 import { db } from "@/lib/db";
 import { formatINR } from "@/lib/format";
 
@@ -10,7 +10,12 @@ export default async function Home() {
   const latestData = await getLatestReleases();
   const latestMovies = latestData?.results?.slice(0, 12) || [];
 
-  const featuredMovie = latestMovies.find((m: any) => m.backdrop_path) || latestMovies[0];
+  // Filter good movies for hero carousel (rated >= 6.0, has backdrop)
+  const heroMovies = latestMovies.filter((m: any) =>
+    m.backdrop_path &&
+    m.vote_average >= 6.0 &&
+    !m.title?.toLowerCase().includes('dhurandar')
+  ).slice(0, 5);
 
   const moviesWithCollections = await db.dailyBoxOffice.groupBy({
     by: ['movieId'],
@@ -32,81 +37,9 @@ export default async function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* ═══════════════════════════════════════════════════════════════
-                GEN-Z HERO SECTION
+                AUTO-ROTATING HERO CAROUSEL
             ═══════════════════════════════════════════════════════════════ */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-        {/* Background Image */}
-        {featuredMovie?.backdrop_path && (
-          <div className="absolute inset-0">
-            <img
-              src={`${TMDB_IMAGE_BASE_URL}${featuredMovie.backdrop_path}`}
-              alt=""
-              className="w-full h-full object-cover"
-            />
-            {/* Gen-Z Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-background via-background/95 to-background/50" />
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent" />
-            {/* Subtle color tint */}
-            <div className="absolute inset-0 bg-primary/5" />
-          </div>
-        )}
-
-        {/* Hero Content */}
-        <div className="container mx-auto px-4 relative z-10 py-20">
-          <div className="max-w-2xl">
-            {/* Trending Badge */}
-            <div className="flex items-center gap-2 mb-8">
-              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary/20 to-cyan/20 border border-primary/30 backdrop-blur-sm">
-                <Zap className="h-4 w-4 text-cyan" />
-                <span className="text-sm font-semibold text-gradient uppercase tracking-wider">Now Trending</span>
-              </div>
-            </div>
-
-            {/* Title */}
-            <h1 className="font-heading text-5xl md:text-7xl font-bold tracking-tight mb-6 leading-[1.1]">
-              {featuredMovie?.title || "Box Office Tracker"}
-            </h1>
-
-            {/* Description */}
-            <p className="text-lg md:text-xl text-muted-foreground mb-10 line-clamp-3 leading-relaxed">
-              {featuredMovie?.overview || "Track real-time box office collections of the latest releases."}
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-wrap gap-4">
-              <Link href={`/movie/${featuredMovie?.id}`}>
-                <Button size="lg" className="gap-2 rounded-full px-8">
-                  <Play className="h-5 w-5 fill-current" /> Watch Details
-                </Button>
-              </Link>
-              <Link href="/search">
-                <Button size="lg" variant="outline" className="gap-2 rounded-full px-8">
-                  <Sparkles className="h-5 w-5" /> Explore
-                </Button>
-              </Link>
-            </div>
-
-            {/* Stats Row */}
-            {featuredMovie && (
-              <div className="flex items-center gap-6 mt-14 p-5 rounded-2xl glass-strong max-w-fit">
-                <div className="flex items-center gap-2">
-                  <Star className="h-5 w-5 fill-yellow-500 text-yellow-500" />
-                  <span className="font-heading font-bold text-2xl">{featuredMovie.vote_average?.toFixed(1)}</span>
-                  <span className="text-muted-foreground text-sm">/10</span>
-                </div>
-                <div className="w-px h-8 bg-border" />
-                <div>
-                  <span className="font-semibold">{featuredMovie.release_date}</span>
-                  <span className="text-muted-foreground text-sm ml-2">Release</span>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Animated gradient orb */}
-        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-gradient-to-r from-primary/30 to-cyan/20 rounded-full blur-3xl animate-pulse-glow" />
-      </section>
+      <HeroCarousel movies={heroMovies} autoPlayInterval={8000} />
 
       {/* ═══════════════════════════════════════════════════════════════
                 LIVE COLLECTION CARDS
