@@ -9,37 +9,74 @@ interface MovieCardProps {
     posterPath: string | null;
     voteAverage: number;
     releaseDate: string;
-    className?: string; // Add className prop
+    revenue?: number;
+    className?: string;
 }
 
-export function MovieCard({ id, title, posterPath, voteAverage, releaseDate, className }: MovieCardProps) {
+export function MovieCard({ id, title, posterPath, voteAverage, releaseDate, revenue, className }: MovieCardProps) {
+    const year = releaseDate ? new Date(releaseDate).getFullYear() : null;
+    const rating = voteAverage ? voteAverage.toFixed(1) : null;
+
     return (
-        <Link href={`/movie/${id}`} className={cn("group relative block overflow-hidden rounded-lg bg-card border shadow-sm transition-all hover:scale-[1.02] hover:shadow-md", className)}>
-            <div className="aspect-[2/3] w-full overflow-hidden bg-muted">
+        <Link
+            href={`/movie/${id}`}
+            className={cn(
+                "group relative block overflow-hidden rounded-2xl bg-card border border-border/30 transition-all duration-300",
+                "hover:scale-[1.03] hover:border-primary/30 hover:shadow-2xl hover:shadow-primary/10",
+                className
+            )}
+        >
+            {/* Poster Container */}
+            <div className="relative aspect-[2/3] w-full overflow-hidden bg-muted">
                 {posterPath ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
                         src={`${TMDB_IMAGE_LOW_RES_BASE_URL}${posterPath}`}
                         alt={title}
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                         loading="lazy"
                     />
                 ) : (
-                    <div className="flex h-full items-center justify-center text-muted-foreground">
+                    <div className="flex h-full items-center justify-center text-muted-foreground text-sm">
                         No Image
                     </div>
                 )}
-            </div>
-            <div className="p-3">
-                <h3 className="line-clamp-1 font-semibold text-sm leading-none">{title}</h3>
-                <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
-                    <span>{releaseDate ? new Date(releaseDate).getFullYear() : 'N/A'}</span>
-                    <div className="flex items-center gap-1 text-primary">
-                        <Star className="h-3 w-3 fill-primary" />
-                        <span>{voteAverage ? voteAverage.toFixed(1) : 'N/A'}</span>
+
+                {/* Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                {/* Rating Badge - Gold */}
+                {rating && (
+                    <div className="absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-lg bg-black/70 backdrop-blur-sm border border-[hsl(45,93%,52%)]/30">
+                        <Star className="h-3 w-3 fill-[hsl(45,93%,52%)] text-[hsl(45,93%,52%)]" />
+                        <span className="text-xs font-bold text-[hsl(45,93%,52%)]">{rating}</span>
                     </div>
-                </div>
+                )}
+
+                {/* Year Badge */}
+                {year && (
+                    <div className="absolute top-3 right-3 px-2 py-1 rounded-lg bg-black/70 backdrop-blur-sm text-xs font-medium text-white/80">
+                        {year}
+                    </div>
+                )}
             </div>
+
+            {/* Content */}
+            <div className="p-4 space-y-2">
+                <h3 className="font-semibold text-sm leading-tight line-clamp-2 group-hover:text-primary transition-colors">
+                    {title}
+                </h3>
+
+                {/* Optional Revenue Display */}
+                {revenue && revenue > 0 && (
+                    <div className="text-xs font-medium text-primary">
+                        ₹{(revenue / 10000000).toFixed(1)} Cr
+                    </div>
+                )}
+            </div>
+
+            {/* Hover Glow Effect */}
+            <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10 pointer-events-none" />
         </Link>
     );
 }

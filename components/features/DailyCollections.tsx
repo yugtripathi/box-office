@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { formatINR } from "@/lib/format";
-import { CalendarDays, TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { CalendarDays, TrendingUp, TrendingDown, Minus, Trophy } from "lucide-react";
 
 interface DailyCollectionsProps {
     movieId: number;
@@ -33,7 +33,7 @@ export async function DailyCollections({ movieId }: DailyCollectionsProps) {
         <div className="mt-8">
             {/* Header */}
             <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 rounded-lg bg-primary/10">
+                <div className="p-2.5 rounded-xl bg-primary/10 border border-primary/20">
                     <CalendarDays className="h-5 w-5 text-primary" />
                 </div>
                 <div>
@@ -53,14 +53,14 @@ export async function DailyCollections({ movieId }: DailyCollectionsProps) {
                     return (
                         <div
                             key={day.id}
-                            className={`group relative overflow-hidden rounded-xl border transition-all duration-300 hover:shadow-lg hover:scale-[1.01] ${isTopDay
-                                    ? 'bg-gradient-to-r from-yellow-500/10 via-amber-500/5 to-transparent border-yellow-500/30'
-                                    : 'bg-card border-border hover:border-primary/30'
+                            className={`group relative overflow-hidden rounded-xl border transition-all duration-300 hover:scale-[1.01] ${isTopDay
+                                    ? 'bg-gradient-to-r from-[hsl(45,93%,52%)]/10 via-card to-card border-[hsl(45,93%,52%)]/30 hover:border-[hsl(45,93%,52%)]/50'
+                                    : 'bg-card border-border/50 hover:border-primary/30'
                                 }`}
                         >
                             {/* Progress Bar Background */}
                             <div
-                                className={`absolute inset-y-0 left-0 transition-all duration-500 ${isTopDay ? 'bg-yellow-500/10' : 'bg-green-500/10'
+                                className={`absolute inset-y-0 left-0 transition-all duration-500 ${isTopDay ? 'bg-[hsl(45,93%,52%)]/10' : 'bg-primary/5'
                                     }`}
                                 style={{ width: `${percentage}%` }}
                             />
@@ -70,10 +70,10 @@ export async function DailyCollections({ movieId }: DailyCollectionsProps) {
                                 {/* Left: Day Info */}
                                 <div className="flex items-center gap-4">
                                     <div className={`w-14 h-14 rounded-xl flex flex-col items-center justify-center font-bold ${isTopDay
-                                            ? 'bg-yellow-500/20 text-yellow-600 dark:text-yellow-400'
+                                            ? 'bg-[hsl(45,93%,52%)]/20 text-[hsl(45,93%,52%)]'
                                             : 'bg-muted text-foreground'
                                         }`}>
-                                        <span className="text-xs uppercase tracking-wider opacity-70">Day</span>
+                                        <span className="text-[10px] uppercase tracking-wider opacity-70">Day</span>
                                         <span className="text-xl">{day.dayNumber}</span>
                                     </div>
                                     <div>
@@ -94,8 +94,8 @@ export async function DailyCollections({ movieId }: DailyCollectionsProps) {
                                 <div className="flex items-center gap-4">
                                     {/* Trend Indicator */}
                                     {previousDay && (
-                                        <div className={`flex items-center gap-1 text-sm font-medium ${trend === 'up' ? 'text-green-500' :
-                                                trend === 'down' ? 'text-red-500' : 'text-muted-foreground'
+                                        <div className={`flex items-center gap-1 text-sm font-medium ${trend === 'up' ? 'text-[hsl(142,71%,45%)]' :
+                                                trend === 'down' ? 'text-[hsl(0,84%,60%)]' : 'text-muted-foreground'
                                             }`}>
                                             {trend === 'up' && <TrendingUp className="h-4 w-4" />}
                                             {trend === 'down' && <TrendingDown className="h-4 w-4" />}
@@ -104,13 +104,14 @@ export async function DailyCollections({ movieId }: DailyCollectionsProps) {
                                     )}
 
                                     {/* Amount */}
-                                    <div className={`text-right ${isTopDay ? 'text-yellow-600 dark:text-yellow-400' : ''}`}>
+                                    <div className={`text-right ${isTopDay ? 'text-[hsl(45,93%,52%)]' : ''}`}>
                                         <div className="text-lg md:text-xl font-bold tabular-nums">
                                             {formatINR(day.amount)}
                                         </div>
                                         {isTopDay && (
-                                            <div className="text-xs font-medium text-yellow-600 dark:text-yellow-400 uppercase tracking-wider">
-                                                🏆 Best Day
+                                            <div className="flex items-center gap-1 text-xs font-medium text-[hsl(45,93%,52%)] uppercase tracking-wider">
+                                                <Trophy className="h-3 w-3" />
+                                                Best Day
                                             </div>
                                         )}
                                     </div>

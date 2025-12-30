@@ -13,7 +13,7 @@ export async function GET() {
 
         // Convert to object key-value for easy frontend consumption
         const responseData: Record<number, string> = {};
-        moviesWithCollections.forEach(item => {
+        moviesWithCollections.forEach((item: { movieId: number; _sum: { amount: bigint | null } }) => {
             if (item._sum.amount) {
                 responseData[item.movieId] = item._sum.amount.toString();
             }
