@@ -73,9 +73,12 @@ export function HeroCarousel({ movies, autoPlayInterval = 8000 }: HeroCarouselPr
                         />
                     </div>
                 ))}
-                {/* Gradient Overlays */}
-                <div className="absolute inset-0 bg-gradient-to-r from-background via-background/95 to-background/50" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent" />
+                {/* Gradient Overlays - Strong dark overlay for text visibility on any image */}
+                <div className="absolute inset-0 bg-gradient-to-r from-black via-black/90 to-black/30" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+                {/* Extra dark patch on left for text area */}
+                <div className="absolute inset-y-0 left-0 w-2/3 bg-gradient-to-r from-black/80 to-transparent" />
+                {/* Subtle color tint */}
                 <div className="absolute inset-0 bg-primary/5" />
             </div>
 
@@ -90,18 +93,18 @@ export function HeroCarousel({ movies, autoPlayInterval = 8000 }: HeroCarouselPr
                         </div>
                     </div>
 
-                    {/* Title with fade transition */}
+                    {/* Title with fade transition - text shadow for extra visibility */}
                     <h1
                         key={currentMovie.id}
-                        className="font-heading text-5xl md:text-7xl font-bold tracking-tight mb-6 leading-[1.1] animate-in fade-in-0 slide-in-from-bottom-4 duration-500"
+                        className="font-heading text-5xl md:text-7xl font-bold tracking-tight mb-6 leading-[1.1] animate-in fade-in-0 slide-in-from-bottom-4 duration-500 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
                     >
                         {currentMovie.title}
                     </h1>
 
-                    {/* Description */}
+                    {/* Description - with text shadow for readability */}
                     <p
                         key={`desc-${currentMovie.id}`}
-                        className="text-lg md:text-xl text-muted-foreground mb-10 line-clamp-3 leading-relaxed animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-100"
+                        className="text-lg md:text-xl text-gray-200 mb-10 line-clamp-3 leading-relaxed animate-in fade-in-0 slide-in-from-bottom-4 duration-500 delay-100 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]"
                     >
                         {currentMovie.overview}
                     </p>
@@ -164,8 +167,8 @@ export function HeroCarousel({ movies, autoPlayInterval = 8000 }: HeroCarouselPr
                             key={idx}
                             onClick={() => goToSlide(idx)}
                             className={`h-2 rounded-full transition-all duration-300 ${idx === currentIndex
-                                    ? 'w-8 bg-primary'
-                                    : 'w-2 bg-white/30 hover:bg-white/50'
+                                ? 'w-8 bg-primary'
+                                : 'w-2 bg-white/30 hover:bg-white/50'
                                 }`}
                             aria-label={`Go to slide ${idx + 1}`}
                         />
