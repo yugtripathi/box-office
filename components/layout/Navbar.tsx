@@ -3,7 +3,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Search, Film, TrendingUp, Calendar } from 'lucide-react';
+import { Search, Sparkles, TrendingUp, Calendar, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SearchSuggestions } from '@/components/features/SearchSuggestions';
 
@@ -22,38 +22,38 @@ export function Navbar() {
     return (
         <header
             className={`sticky top-0 z-50 w-full transition-all duration-300 ${scrolled
-                    ? 'bg-background/95 backdrop-blur-xl border-b border-border/50 shadow-lg shadow-black/10'
+                    ? 'glass-strong shadow-lg shadow-black/10'
                     : 'bg-transparent'
                 }`}
         >
             <div className="container mx-auto flex h-16 items-center px-4">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2.5 mr-8 group">
-                    <div className="relative p-2 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                        <Film className="h-5 w-5 text-primary" />
+                    <div className="relative p-2 rounded-xl bg-gradient-to-br from-primary to-cyan group-hover:shadow-lg group-hover:shadow-primary/30 transition-all duration-300">
+                        <Zap className="h-5 w-5 text-white" />
                     </div>
-                    <div className="hidden md:block">
-                        <span className="font-bold text-lg tracking-tight">Box</span>
-                        <span className="font-bold text-lg tracking-tight text-primary">Office</span>
+                    <div className="hidden md:flex items-baseline gap-1">
+                        <span className="font-heading font-bold text-xl tracking-tight">Box</span>
+                        <span className="font-heading font-bold text-xl tracking-tight text-gradient">Office</span>
                     </div>
                 </Link>
 
                 {/* Navigation */}
                 <nav className="flex items-center gap-1 mr-auto">
                     <Link href="/top">
-                        <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground">
+                        <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground hover:bg-primary/10">
                             <TrendingUp className="h-4 w-4" />
-                            <span className="hidden sm:inline">Top Grossing</span>
+                            <span className="hidden sm:inline">Trending</span>
                         </Button>
                     </Link>
                     <Link href="/year/2025">
-                        <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground">
-                            <Calendar className="h-4 w-4" />
+                        <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground hover:bg-primary/10">
+                            <Sparkles className="h-4 w-4" />
                             <span className="hidden sm:inline">2025</span>
                         </Button>
                     </Link>
                     <Link href="/year/2024" className="hidden sm:block">
-                        <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+                        <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground hover:bg-primary/10">
                             2024
                         </Button>
                     </Link>
@@ -61,10 +61,8 @@ export function Navbar() {
 
                 {/* Search */}
                 <div className="flex items-center gap-3">
-                    {/* Desktop Search with Suggestions */}
                     <SearchSuggestions />
 
-                    {/* Mobile Search Button */}
                     <Button
                         variant="ghost"
                         size="icon"

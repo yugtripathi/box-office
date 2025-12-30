@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Star } from "lucide-react";
+import { Star, Sparkles } from "lucide-react";
 import { TMDB_IMAGE_LOW_RES_BASE_URL } from "@/lib/tmdb";
 import { cn } from "@/lib/utils";
 
@@ -21,13 +21,13 @@ export function MovieCard({ id, title, posterPath, voteAverage, releaseDate, rev
         <Link
             href={`/movie/${id}`}
             className={cn(
-                "group relative block overflow-hidden rounded-2xl bg-card border border-border/30 transition-all duration-300",
-                "hover:scale-[1.03] hover:border-primary/30 hover:shadow-2xl hover:shadow-primary/10",
+                "group relative block overflow-hidden rounded-2xl bg-card/50 border border-border/30 transition-all duration-300",
+                "hover:scale-[1.03] hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/20",
                 className
             )}
         >
             {/* Poster Container */}
-            <div className="relative aspect-[2/3] w-full overflow-hidden bg-muted">
+            <div className="relative aspect-[2/3] w-full overflow-hidden">
                 {posterPath ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -37,46 +37,47 @@ export function MovieCard({ id, title, posterPath, voteAverage, releaseDate, rev
                         loading="lazy"
                     />
                 ) : (
-                    <div className="flex h-full items-center justify-center text-muted-foreground text-sm">
+                    <div className="flex h-full items-center justify-center bg-muted text-muted-foreground text-sm">
                         No Image
                     </div>
                 )}
 
                 {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
 
-                {/* Rating Badge - Gold */}
+                {/* Rating Badge - Gradient Gold */}
                 {rating && (
-                    <div className="absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-lg bg-black/70 backdrop-blur-sm border border-[hsl(45,93%,52%)]/30">
-                        <Star className="h-3 w-3 fill-[hsl(45,93%,52%)] text-[hsl(45,93%,52%)]" />
-                        <span className="text-xs font-bold text-[hsl(45,93%,52%)]">{rating}</span>
+                    <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gradient-to-r from-yellow-500 to-amber-500 shadow-lg">
+                        <Star className="h-3 w-3 fill-black text-black" />
+                        <span className="text-xs font-bold text-black">{rating}</span>
                     </div>
                 )}
 
                 {/* Year Badge */}
                 {year && (
-                    <div className="absolute top-3 right-3 px-2 py-1 rounded-lg bg-black/70 backdrop-blur-sm text-xs font-medium text-white/80">
+                    <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full glass text-xs font-medium text-white">
                         {year}
                     </div>
                 )}
+
+                {/* Bottom Content on Poster */}
+                <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <h3 className="font-heading font-semibold text-sm leading-tight line-clamp-2 text-white group-hover:text-primary transition-colors">
+                        {title}
+                    </h3>
+
+                    {/* Revenue Display */}
+                    {revenue && revenue > 0 && (
+                        <div className="flex items-center gap-1.5 mt-2 text-xs font-medium text-emerald-400">
+                            <Sparkles className="h-3 w-3" />
+                            ₹{(revenue / 10000000).toFixed(1)} Cr
+                        </div>
+                    )}
+                </div>
             </div>
 
-            {/* Content */}
-            <div className="p-4 space-y-2">
-                <h3 className="font-semibold text-sm leading-tight line-clamp-2 group-hover:text-primary transition-colors">
-                    {title}
-                </h3>
-
-                {/* Optional Revenue Display */}
-                {revenue && revenue > 0 && (
-                    <div className="text-xs font-medium text-primary">
-                        ₹{(revenue / 10000000).toFixed(1)} Cr
-                    </div>
-                )}
-            </div>
-
-            {/* Hover Glow Effect */}
-            <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10 pointer-events-none" />
+            {/* Hover Glow Ring */}
+            <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/5 pointer-events-none group-hover:ring-primary/30 transition-all" />
         </Link>
     );
 }

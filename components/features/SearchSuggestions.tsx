@@ -3,8 +3,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Search, Star, X, Loader2 } from 'lucide-react';
-import { Input } from '@/components/ui/input';
+import { Search, Star, X, Loader2, Sparkles } from 'lucide-react';
 import { TMDB_IMAGE_LOW_RES_BASE_URL } from '@/lib/tmdb';
 import { cn } from '@/lib/utils';
 
@@ -26,7 +25,6 @@ export function SearchSuggestions() {
     const containerRef = React.useRef<HTMLDivElement>(null);
     const inputRef = React.useRef<HTMLInputElement>(null);
 
-    // Debounced search
     React.useEffect(() => {
         if (query.trim().length < 2) {
             setSuggestions([]);
@@ -54,7 +52,6 @@ export function SearchSuggestions() {
         return () => clearTimeout(timeoutId);
     }, [query]);
 
-    // Click outside to close
     React.useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -67,7 +64,6 @@ export function SearchSuggestions() {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    // Keyboard navigation
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (!isOpen) {
             if (e.key === 'Enter' && query.trim()) {
@@ -126,10 +122,10 @@ export function SearchSuggestions() {
                     type="text"
                     placeholder="Search movies..."
                     className={cn(
-                        "w-[280px] md:w-[320px] h-10 pl-10 pr-10 rounded-xl text-sm",
+                        "w-[280px] md:w-[320px] h-10 pl-10 pr-10 rounded-xl text-sm font-medium",
                         "bg-secondary/50 border border-border/50 text-foreground",
                         "placeholder:text-muted-foreground",
-                        "hover:bg-secondary/70 hover:border-border",
+                        "hover:bg-secondary/70 hover:border-primary/30",
                         "focus:bg-background focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20",
                         "transition-all duration-200"
                     )}
@@ -140,7 +136,6 @@ export function SearchSuggestions() {
                         if (suggestions.length > 0) setIsOpen(true);
                     }}
                 />
-                {/* Clear button or loading indicator */}
                 {query && (
                     <button
                         onClick={clearSearch}
@@ -157,7 +152,7 @@ export function SearchSuggestions() {
 
             {/* Suggestions Dropdown */}
             {isOpen && suggestions.length > 0 && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-[#181825] dark:bg-[#181825] border border-border rounded-2xl shadow-2xl overflow-hidden z-50 animate-in fade-in-0 slide-in-from-top-2 duration-200">
+                <div className="absolute top-full left-0 right-0 mt-2 bg-[#12121a] border border-border/50 rounded-2xl shadow-2xl shadow-black/50 overflow-hidden z-50 animate-in fade-in-0 slide-in-from-top-2 duration-200">
                     <div className="p-2 space-y-1">
                         {suggestions.map((movie, index) => (
                             <button
@@ -165,8 +160,8 @@ export function SearchSuggestions() {
                                 onClick={() => handleSuggestionClick(movie.id)}
                                 className={cn(
                                     "w-full flex items-center gap-3 p-2.5 rounded-xl text-left transition-all duration-150",
-                                    "hover:bg-accent group",
-                                    selectedIndex === index && "bg-accent"
+                                    "hover:bg-primary/10 group",
+                                    selectedIndex === index && "bg-primary/10"
                                 )}
                             >
                                 {/* Movie Poster */}
@@ -188,7 +183,7 @@ export function SearchSuggestions() {
 
                                 {/* Movie Info */}
                                 <div className="flex-1 min-w-0">
-                                    <h4 className="font-medium text-sm line-clamp-1 group-hover:text-primary transition-colors">
+                                    <h4 className="font-heading font-medium text-sm line-clamp-1 group-hover:text-primary transition-colors">
                                         {movie.title}
                                     </h4>
                                     <div className="flex items-center gap-3 mt-1">
@@ -197,8 +192,8 @@ export function SearchSuggestions() {
                                         </span>
                                         {movie.vote_average > 0 && (
                                             <div className="flex items-center gap-1">
-                                                <Star className="h-3 w-3 fill-[hsl(45,93%,52%)] text-[hsl(45,93%,52%)]" />
-                                                <span className="text-xs font-medium text-[hsl(45,93%,52%)]">
+                                                <Star className="h-3 w-3 fill-yellow-500 text-yellow-500" />
+                                                <span className="text-xs font-semibold text-yellow-500">
                                                     {movie.vote_average.toFixed(1)}
                                                 </span>
                                             </div>
@@ -212,10 +207,10 @@ export function SearchSuggestions() {
                     {/* View All Results Footer */}
                     <Link
                         href={`/search?q=${encodeURIComponent(query)}`}
-                        className="flex items-center justify-center gap-2 p-3 text-sm font-medium text-primary bg-accent/50 hover:bg-accent transition-colors border-t border-border/50"
+                        className="flex items-center justify-center gap-2 p-3 text-sm font-medium text-primary bg-primary/5 hover:bg-primary/10 transition-colors border-t border-border/30"
                         onClick={() => setIsOpen(false)}
                     >
-                        <Search className="h-4 w-4" />
+                        <Sparkles className="h-4 w-4" />
                         View all results for &quot;{query}&quot;
                     </Link>
                 </div>
@@ -223,7 +218,7 @@ export function SearchSuggestions() {
 
             {/* No Results State */}
             {isOpen && query.length >= 2 && suggestions.length === 0 && !isLoading && (
-                <div className="absolute top-full left-0 right-0 mt-2 p-6 bg-[#181825] dark:bg-[#181825] border border-border rounded-2xl shadow-2xl z-50 text-center animate-in fade-in-0 slide-in-from-top-2 duration-200">
+                <div className="absolute top-full left-0 right-0 mt-2 p-6 bg-[#12121a] border border-border/50 rounded-2xl shadow-2xl z-50 text-center animate-in fade-in-0 slide-in-from-top-2 duration-200">
                     <p className="text-sm text-muted-foreground">No movies found for &quot;{query}&quot;</p>
                 </div>
             )}

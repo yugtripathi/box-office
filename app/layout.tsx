@@ -1,20 +1,27 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Space_Grotesk, DM_Sans } from "next/font/google";
 import { Navbar } from "@/components/layout/Navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-heading",
   subsets: ["latin"],
   display: "swap",
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const dmSans = DM_Sans({
+  variable: "--font-sans",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "Box Office Tracker | Real-Time Movie Collections",
-  description: "Track real-time box office collections, ratings, and analytics for the latest Bollywood and Hollywood releases.",
-  keywords: ["box office", "movie collections", "bollywood", "ratings", "revenue"],
+  title: "Box Office 🎬 | Live Movie Collections",
+  description: "Track real-time box office collections, ratings, and analytics for the hottest movies.",
+  keywords: ["box office", "movies", "bollywood", "ratings", "collections", "trending"],
 };
 
 export default function RootLayout({
@@ -25,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} antialiased min-h-screen bg-background font-sans`}
+        className={`${spaceGrotesk.variable} ${dmSans.variable} antialiased min-h-screen bg-background font-sans`}
       >
         <ThemeProvider
           attribute="class"
